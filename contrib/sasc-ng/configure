@@ -124,6 +124,16 @@ echo "\nYour kernel is to old.\n
 exit 1
 fi
 
+version=$( uname -r|cut -d\- -f1| tr -d '[A-Z][a-z]' )
+patch=$(echo | awk -v n1=$version -v n2=3.6.999 '{if (n1>n2) printf ("1"); else printf ("0");}')
+
+if [ ${patch} -gt 0 ]
+then
+git checkout -b module
+git checkout -b prog
+git checkout master
+fi
+
 if test "x$dvb_path" = "x"; then
 echo "\nYou should set the configure option '--dvb-dir=' like this:\n
 \n./configure --dvb-dir=/path/to/kernel/source\n
