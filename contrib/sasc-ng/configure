@@ -114,6 +114,16 @@ for opt do
   esac
 done
 
+ver=$( uname -r|cut -d\- -f1| tr -d '[A-Z][a-z]' )
+kernelversion=$(echo | awk -v n1=$ver -v n2=2.6.38 '{if (n1<n2) printf ("1"); else printf ("0");}')
+
+if [ ${kernelversion} -gt 0 ]
+then
+echo "\nYour kernel is to old.\n
+\nYou can use this software with kernelversions 2.6.38 and higher.\n"
+exit 1
+fi
+
 if test "x$CXX" = "x"; then
   CXX=g++
 fi
