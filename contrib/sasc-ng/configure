@@ -129,10 +129,15 @@ patch=$(echo | awk -v n1=$version -v n2=3.6.999 '{if (n1>n2) printf ("1"); else 
 
 if [ ${patch} -gt 0 ]
 then
-git checkout -b module
 git checkout -b prog
+git checkout -b module
+cd ../../
+patch -p1 < contrib/sasc-ng/compile-with-3.7-or-higher-kernel.patch
+cd contrib/sasc-ng
+git commit -a -m "patch"
 git checkout master
 fi
+exit 0
 
 if test "x$dvb_path" = "x"; then
 echo "\nYou should set the configure option '--dvb-dir=' like this:\n
@@ -256,3 +261,4 @@ rm -rf "${TMPDIR}"
 echo "CXX=$CXX" >> config.mak
 date >> config.log
 echo "	$0 $*" >> config.log
+
