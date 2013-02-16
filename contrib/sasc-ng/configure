@@ -137,7 +137,6 @@ cd contrib/sasc-ng
 git commit -a -m "patch"
 git checkout master
 fi
-exit 0
 
 if test "x$dvb_path" = "x"; then
 echo "\nYou should set the configure option '--dvb-dir=' like this:\n
