@@ -124,26 +124,26 @@ echo "\nYour kernel is to old.\n
 exit 1
 fi
 
-version=$( uname -r|cut -d\- -f1| tr -d '[A-Z][a-z]' )
-patch=$(echo | awk -v n1=$version -v n2=3.6.999 '{if (n1>n2) printf ("1"); else printf ("0");}')
-
-if [ ${patch} -gt 0 ]
-then
-git checkout -b prog
-git checkout -b module
-cd ../../
-patch -p1 < contrib/sasc-ng/compile-with-3.7-or-higher-kernel.patch
-cd contrib/sasc-ng
-git commit -a -m "patch"
-git checkout master
-fi
-
 if test "x$dvb_path" = "x"; then
 echo "\nYou should set the configure option '--dvb-dir=' like this:\n
 \n./configure --dvb-dir=/path/to/kernel/source\n
 \nsasc-ng needs a patched kernel, so you did build one somewhere on your system.\n"
 exit 1
 fi
+
+git clean -xfd > /dev/null 2>&1
+git reset --hard HEAD > /dev/null 2>&1
+
+version=$( uname -r|cut -d\- -f1| tr -d '[A-Z][a-z]' )
+patch=$(echo | awk -v n1=$version -v n2=3.6.999 '{if (n1>n2) printf ("1"); else printf ("0");}')
+
+if [ ${patch} -gt 0 ]
+then
+cd ../../
+patch -p1 < contrib/sasc-ng/compile-with-3.7-or-higher-kernel.patch
+cd contrib/sasc-ng
+fi
+
 
 if test "x$CXX" = "x"; then
   CXX=g++
